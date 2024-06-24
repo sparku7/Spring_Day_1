@@ -1,6 +1,9 @@
 package com.qa.LBG_Srping_2.rest;
 
 import com.qa.LBG_Srping_2.entities.Person;
+import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -17,27 +20,35 @@ public class PersonController {
     }
 
     @PostMapping("/create")
-    public Person createPerson(@RequestBody Person person) {
+    public ResponseEntity<Person> createPerson(@RequestBody Person person) {
         this.people.add(person);
-        return this.people.get(this.people.size() - 1);
+        return new ResponseEntity<>(this.people.get(this.people.size() - 1), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/remove/{id}")
-    public Person removePerson(@PathVariable int id) {
-        return this.people.remove(id);
+    public ResponseEntity<Person> removePerson(@PathVariable int id) {
+        if (id < 0 || id >= this.people.size()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(this.people.remove(id), HttpStatus.OK);
     }
 
+
     @PatchMapping("/update/{id}")
-    public Person updatePerson(@PathVariable int id,
-                               @RequestParam (required = false) String name,
-                               @RequestParam (required = false) Integer age,
-                               @RequestParam (required = false) gitString job){
+    public ResponseEntity<Person> updatePerson(@PathVariable int id,
+                                        @RequestParam (required = false) String name,
+                                        @RequestParam (required = false) Integer age,
+                                        @RequestParam (required = false) String job){
+
+        if (id < 0 || id >= this.people.size()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
        Person toUpdate = this.people.get(id);
 
        if (name != null) toUpdate.setName(name);
        if (age != null) toUpdate.setAge((age));
        if (job != null) toUpdate.setJob(job);
 
-       return toUpdate;
+       return new ResponseEntity<>(toUpdate, HttpStatus.OK);
     }
 }
