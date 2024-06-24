@@ -29,9 +29,9 @@ public class PersonController {
 
     @PatchMapping("/update/{id}")
     public Person updatePerson(@PathVariable int id,
-                               @RequestParam String name,
-                               @RequestParam Integer age,
-                               @RequestParam String job){
+                               @RequestParam (required = false) String name,
+                               @RequestParam (required = false) Integer age,
+                               @RequestParam (required = false) String job){
        Person toUpdate = this.people.get(id);
 
        if (name != null) toUpdate.setName(name);
