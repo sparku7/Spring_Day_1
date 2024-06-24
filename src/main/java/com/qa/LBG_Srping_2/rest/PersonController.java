@@ -31,7 +31,7 @@ public class PersonController {
     public Person updatePerson(@PathVariable int id,
                                @RequestParam (required = false) String name,
                                @RequestParam (required = false) Integer age,
-                               @RequestParam (required = false) String job){
+                               @RequestParam (required = false) gitString job){
        Person toUpdate = this.people.get(id);
 
        if (name != null) toUpdate.setName(name);
