@@ -1,4 +1,4 @@
-package com.qa.LBG_Srping_2;
+package com.qa.LBG_Spring_2;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

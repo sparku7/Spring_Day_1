@@ -1,8 +1,7 @@
-package com.qa.LBG_Srping_2.entities;
+package com.qa.LBG_Spring_2.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
@@ -14,6 +13,10 @@ public class Person {
     private String name;
     private int age;
     private String job;
+
+    public Person(){
+
+    }
 
     public Person(Integer id, String name, int age, String job) {
         this.id = id;
