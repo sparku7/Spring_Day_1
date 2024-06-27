@@ -2,10 +2,9 @@ package com.qa.LBG_Spring_2.entities;
 
 // Import statements for JPA (Java Persistence API) annotations
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 // This annotation specifies that the class is an entity and is mapped to a database table.
 @Entity
@@ -20,8 +19,12 @@ public class Person {
     private int age;     // Field to store the age of the person
     private String job;  // Field to store the job title of the person
 
+    @OneToMany(mappedBy ="person")
+    private List<Pet> pets;
+
     // Default constructor - required by JPA
     public Person() {
+        super();
 
     }
 
@@ -71,5 +74,22 @@ public class Person {
     // Setter method for job field
     public void setJob(String job) {
         this.job = job;
+    }
+
+    public List<Pet> getPets(){
+        return pets;
+    }
+
+    public void setPets(List<Pet> pets){
+        this.pets = pets;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                ", job='" + job +
+                '}';
     }
 }

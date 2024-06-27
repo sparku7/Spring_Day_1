@@ -5,6 +5,7 @@ package com.qa.LBG_Spring_2.rest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qa.LBG_Spring_2.entities.Person;
+import com.qa.LBG_Spring_2.entities.Pet;
 import org.junit.jupiter.api.Test;
 import org.mockito.plugins.MockMaker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class PersonControllerMvcTest {
     private ObjectMapper mapper; // ObjectMapper for converting objects to/from JSON
 
     @Test
-    void testCreate() throws Exception {
+    void testCreatePerson() throws Exception {
         // Create a new Person object for testing
         Person newPerson = new Person(null, "Bob", 42, "Builder");
         // Convert the Person object to JSON format
@@ -47,7 +48,7 @@ public class PersonControllerMvcTest {
                 .content(newPersonAsJson);
 
         // Define a matcher to check if the HTTP status is OK (200)
-        ResultMatcher checkStatus = MockMvcResultMatchers.status().isOk();
+        ResultMatcher checkStatus = MockMvcResultMatchers.status().is2xxSuccessful();
         // Create an expected Person object that should be returned after creation
         Person createdPerson = new Person(2, "Bob", 42, "Builder");
         // Convert the expected Person object to JSON format
@@ -55,6 +56,33 @@ public class PersonControllerMvcTest {
 
         // Define a matcher to check if the response body matches the expected JSON
         ResultMatcher checkBody = MockMvcResultMatchers.content().json(createdPersonAsJson);
+
+        // Perform the mock request using MockMvc and validate the expected results
+        this.mvc.perform(mockRequest)
+                .andExpect(checkStatus)
+                .andExpect(checkBody);
+    }
+
+    @Test
+    void testCreatePet() throws Exception {
+        // Create a new Person object for testing
+        Pet newPet = new Pet(null, "Cat", "Harry", 8);
+        // Convert the Person object to JSON format
+        String newPetAsJson = this.mapper.writeValueAsString(newPet);
+        // Build a POST request to create a new Person
+        RequestBuilder mockRequest = MockMvcRequestBuilders.post("/pet/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(newPetAsJson);
+
+        // Define a matcher to check if the HTTP status is OK (200)
+        ResultMatcher checkStatus = MockMvcResultMatchers.status().is2xxSuccessful();
+        // Create an expected Person object that should be returned after creation
+        Pet createdPet = new Pet(2, "Cat", "Harry", 8);
+        // Convert the expected Person object to JSON format
+        String createdPetAsJson = this.mapper.writeValueAsString(createdPet);
+
+        // Define a matcher to check if the response body matches the expected JSON
+        ResultMatcher checkBody = MockMvcResultMatchers.content().json(createdPetAsJson);
 
         // Perform the mock request using MockMvc and validate the expected results
         this.mvc.perform(mockRequest)

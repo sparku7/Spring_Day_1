@@ -5,7 +5,9 @@ import com.qa.LBG_Spring_2.repos.PersonRepo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import com.qa.LBG_Spring_2.dto.PersonDto;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,16 +20,24 @@ public class PersonService {
         this.repo = repo;
     }
 
-    public List<Person> getAll() {
-        return this.repo.findAll();
+    public List<PersonDto> getAll() {
+        List<Person> found =  this.repo.findAll();
+        List<PersonDto> dtos = new ArrayList<>();
+
+
+        for (Person person : found) {
+            dtos.add(new PersonDto(person));
+        }
+
+        return dtos;
     }
 
     public ResponseEntity<?> getPerson(Integer id) {
-        Optional<Person> found = this.repo.findById(id);
-        if (found.isEmpty()) {
+        if (!this.repo.existsById(id))
             return new ResponseEntity<>("No person found with id " + id, HttpStatus.NOT_FOUND);
-        }
-        return ResponseEntity.ok(found.get());
+        Person found = this.repo.findById(id).get();
+        // missing not found logic
+        return ResponseEntity.ok(new PersonDto(found));
     }
 
     public Person createPerson(Person person) {

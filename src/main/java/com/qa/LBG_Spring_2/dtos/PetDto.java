@@ -1,34 +1,37 @@
-package com.qa.LBG_Spring_2.entities;
+package com.qa.LBG_Spring_2.dto;
 
-import jakarta.persistence.*;
+import com.qa.LBG_Spring_2.entities.Pet;
 
-@Entity
-public class Pet {
+public class PetDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String type;
     private String name;
     private Integer age;
 
-    @ManyToOne
-    private Person person;
 
-    // No-argument constructor required by JPA
-    public Pet() {
+    public PetDto() {
+        // Default constructor
     }
 
-    // Parameterized constructor for initializing fields
-    public Pet(Integer id, String type, String name, Integer age) {
+    public PetDto(Pet pet) {
+        this.id = pet.getId();
+        this.type = pet.getType();
+        this.name = pet.getName();
+        this.age = pet.getAge();
+    }
+
+
+    public PetDto(Integer id, String type, String name, Integer age) {
         this.id = id;
         this.type = type;
         this.name = name;
         this.age = age;
+
     }
 
-    // Getter and setter methods
+    // Getters and setters for all fields
+
     public Integer getId() {
         return id;
     }
@@ -61,11 +64,4 @@ public class Pet {
         this.age = age;
     }
 
-    public Person getPerson() {
-        return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
-    }
 }

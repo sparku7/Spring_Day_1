@@ -6,6 +6,7 @@ import com.qa.LBG_Spring_2.entities.Person;
 import com.qa.LBG_Spring_2.services.PersonService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.qa.LBG_Spring_2.dto.PersonDto;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class PersonController {
 
     // Endpoint to get all Person records
     @GetMapping("/person/get/all")
-    public List<Person> getAll() {
+    public List<PersonDto> getAll() {
         return this.service.getAll();
     }
 

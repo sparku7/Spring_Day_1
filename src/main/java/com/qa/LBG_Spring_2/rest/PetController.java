@@ -6,6 +6,7 @@ import com.qa.LBG_Spring_2.entities.Pet;
 import com.qa.LBG_Spring_2.services.PetService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.qa.LBG_Spring_2.dto.PetDto;
 
 import java.util.List;
 
@@ -23,20 +24,20 @@ public class PetController {
 
     // Endpoint to get all Pet records
     @GetMapping("pet/get/all")
-    public List<Pet> getAll() {
+    public List<PetDto> getAll() {
         return this.service.getAll();
     }
 
     // Endpoint to get a specific Pet by their id
-    @GetMapping("pet//get/{id}")
+    @GetMapping("pet/get/{id}")
     public ResponseEntity<?> get(@PathVariable Integer id) {
         return this.service.getPet(id);
     }
 
     // Endpoint to create a new Pet record
-    @PostMapping("pet/create")
-    public Pet createPet(@RequestBody Pet pet) {
-        return this.service.createPet(pet);
+    @PostMapping("/pet/create")
+    public ResponseEntity<PetDto> createPet(@RequestBody Pet newPet) {
+        return this.service.createPet(newPet);
     }
 
     // Endpoint to delete a specific Pet by their id

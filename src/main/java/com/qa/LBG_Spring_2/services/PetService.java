@@ -5,7 +5,9 @@ import com.qa.LBG_Spring_2.repos.PetRepo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import com.qa.LBG_Spring_2.dto.PetDto;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,8 +20,13 @@ public class PetService {
         this.repo = repo;
     }
 
-    public List<Pet> getAll() {
-        return this.repo.findAll();
+    public List<PetDto> getAll() {
+        List<PetDto> dtos = new ArrayList<>();
+        List<Pet> found =  this.repo.findAll();
+        for (Pet toy : found) {
+            dtos.add(new PetDto(toy));
+        }
+        return dtos;
     }
 
     public ResponseEntity<?> getPet(Integer id) {
@@ -30,8 +37,10 @@ public class PetService {
         return ResponseEntity.ok(found.get());
     }
 
-    public Pet createPet(Pet pet) {
-        return this.repo.save(pet);
+    public ResponseEntity<PetDto> createPet(Pet newPet) {
+        Pet created = this.repo.save(newPet);
+
+        return new ResponseEntity<>(new PetDto(created), HttpStatus.CREATED);
     }
 
     public ResponseEntity<?> updatePet(Integer id, String type, String name, Integer age) {
