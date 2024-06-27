@@ -1,5 +1,5 @@
 -- Drop the table if it exists to start fresh
-DROP TABLE IF EXISTS `person`;
+DROP TABLE IF EXISTS `person` CASCADE;
 
 -- Create the person table
 CREATE TABLE `person` (

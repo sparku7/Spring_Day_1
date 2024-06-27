@@ -1,6 +1,7 @@
 package com.qa.LBG_Spring_2.entities;
 
 // Import statements for JPA (Java Persistence API) annotations
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,7 +21,7 @@ public class Person {
     private String job;  // Field to store the job title of the person
 
     // Default constructor - required by JPA
-    public Person(){
+    public Person() {
 
     }
 

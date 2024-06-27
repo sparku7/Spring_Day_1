@@ -1,6 +1,7 @@
 package com.qa.LBG_Spring_2.rest;
 
 // Import statements for necessary classes and annotations
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qa.LBG_Spring_2.entities.Person;
@@ -16,6 +17,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,7 +26,7 @@ import java.util.List;
 // Annotation to automatically configure MockMvc for web layer testing
 @AutoConfigureMockMvc
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD,
-    scripts = {"classpath:person-schema.sql", "classpath:person-data.sql"})
+        scripts = {"classpath:person-schema.sql", "classpath:person-data.sql"})
 public class PersonControllerMvcTest {
 
     @Autowired
@@ -40,7 +42,7 @@ public class PersonControllerMvcTest {
         // Convert the Person object to JSON format
         String newPersonAsJson = this.mapper.writeValueAsString(newPerson);
         // Build a POST request to create a new Person
-        RequestBuilder mockRequest = MockMvcRequestBuilders.post("/create")
+        RequestBuilder mockRequest = MockMvcRequestBuilders.post("/person/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(newPersonAsJson);
 
@@ -59,54 +61,49 @@ public class PersonControllerMvcTest {
                 .andExpect(checkStatus)
                 .andExpect(checkBody);
     }
-        @Test
-        void testGetID() throws Exception {
-            RequestBuilder mockRequest = MockMvcRequestBuilders.get("/get/1");
-            // Define a matcher to check if the HTTP status is OK (200)
-            ResultMatcher checkStatus = MockMvcResultMatchers.status().isOk();
-            // Create an expected Person object that should be returned after creation
-            Person existing = new Person(1, "Alice", 30, "Engineer");
-            // Convert the expected Person object to JSON format
-            String existingPersonAsJson = this.mapper.writeValueAsString(existing);
 
-            // Define a matcher to check if the response body matches the expected JSON
-            ResultMatcher checkBody = MockMvcResultMatchers.content().json(existingPersonAsJson);
-
-            // Perform the mock request using MockMvc and validate the expected results
-            this.mvc.perform(mockRequest)
-                    .andExpect(checkStatus)
-                    .andExpect(checkBody);
+    @Test
+    void testGetID() throws Exception {
+        RequestBuilder mockRequest = MockMvcRequestBuilders.get("/person/get/1");
+        // Define a matcher to check if the HTTP status is OK (200)
+        ResultMatcher checkStatus = MockMvcResultMatchers.status().isOk();
+        // Create an expected Person object that should be returned after creation
+        Person existing = new Person(1, "Alice", 30, "Engineer");
+        // Convert the expected Person object to JSON format
+        String existingPersonAsJson = this.mapper.writeValueAsString(existing);
+        // Define a matcher to check if the response body matches the expected JSON
+        ResultMatcher checkBody = MockMvcResultMatchers.content().json(existingPersonAsJson);
+        // Perform the mock request using MockMvc and validate the expected results
+        this.mvc.perform(mockRequest)
+                .andExpect(checkStatus)
+                .andExpect(checkBody);
     }
 
-        @Test
-        void testGetAll() throws Exception {
-            RequestBuilder mockRequest = MockMvcRequestBuilders.get("/getAll");
-            // Define a matcher to check if the HTTP status is OK (200)
-            ResultMatcher checkStatus = MockMvcResultMatchers.status().isOk();
-            // Create an expected Person object that should be returned after creation
-            Person existing = new Person(1, "Alice", 30, "Engineer");
-            List<Person> people = Arrays.asList(existing);
-            // Convert the expected Person object to JSON format
-            String peopleAsJson = this.mapper.writeValueAsString(people);
-
-            // Define a matcher to check if the response body matches the expected JSON
-            ResultMatcher checkBody = MockMvcResultMatchers.content().json(peopleAsJson);
-
-            // Perform the mock request using MockMvc and validate the expected results
-            this.mvc.perform(mockRequest)
-                    .andExpect(checkStatus)
-                    .andExpect(checkBody);
+    @Test
+    void testGetAll() throws Exception {
+        RequestBuilder mockRequest = MockMvcRequestBuilders.get("/person/get/all");
+        // Define a matcher to check if the HTTP status is OK (200)
+        ResultMatcher checkStatus = MockMvcResultMatchers.status().isOk();
+        // Create an expected Person object that should be returned after creation
+        Person existing = new Person(1, "Alice", 30, "Engineer");
+        List<Person> people = List.of(existing);
+        // Convert the expected Person object to JSON format
+        String peopleAsJson = this.mapper.writeValueAsString(people);
+        // Define a matcher to check if the response body matches the expected JSON
+        ResultMatcher checkBody = MockMvcResultMatchers.content().json(peopleAsJson);
+        // Perform the mock request using MockMvc and validate the expected results
+        this.mvc.perform(mockRequest)
+                .andExpect(checkStatus)
+                .andExpect(checkBody);
     }
 
     @Test
     void testDelete() throws Exception {
-        RequestBuilder mockRequest = MockMvcRequestBuilders.delete("/remove/1");
+        RequestBuilder mockRequest = MockMvcRequestBuilders.delete("/person/remove/1");
         // Define a matcher to check if the HTTP status is OK (200)
         ResultMatcher checkStatus = MockMvcResultMatchers.status().isOk();
-        // Create an expected Person object that should be returned after creation
-                // Define a matcher to check if the response body matches the expected JSON
+        // Define a matcher to check if the response body matches the expected JSON
         ResultMatcher checkBody = MockMvcResultMatchers.content().string("Person with id 1 has been deleted.");
-
         // Perform the mock request using MockMvc and validate the expected results
         this.mvc.perform(mockRequest)
                 .andExpect(checkStatus)
@@ -118,40 +115,37 @@ public class PersonControllerMvcTest {
 
         Person updated = new Person(1, "Betty", 89, "Stripper");
 
-        RequestBuilder mockRequest = MockMvcRequestBuilders.patch("/update/1")
+        RequestBuilder mockRequest = MockMvcRequestBuilders.patch("/person/update/1")
                 .queryParam("name", updated.getName())
                 .queryParam("age", String.valueOf(updated.getAge()))
                 .queryParam("job", updated.getJob());
         // Define a matcher to check if the HTTP status is OK (200)
         ResultMatcher checkStatus = MockMvcResultMatchers.status().isOk();
-        // Create an expected Person object that should be returned after creation
-
         // Convert the expected Person object to JSON format
         String updatedPersonAsJson = this.mapper.writeValueAsString(updated);
-
         // Define a matcher to check if the response body matches the expected JSON
         ResultMatcher checkBody = MockMvcResultMatchers.content().json(updatedPersonAsJson);
-
         // Perform the mock request using MockMvc and validate the expected results
         this.mvc.perform(mockRequest)
                 .andExpect(checkStatus)
                 .andExpect(checkBody);
     }
+
     @Test
     void testGetID404() throws Exception {
-        RequestBuilder mockRequest = MockMvcRequestBuilders.get("/get/4");
-           ResultMatcher checkStatus = MockMvcResultMatchers.status().isNotFound();
+        RequestBuilder mockRequest = MockMvcRequestBuilders.get("/person/get/4");
+        ResultMatcher checkStatus = MockMvcResultMatchers.status().isNotFound();
         ResultMatcher checkBody = MockMvcResultMatchers.content().string("No person found with id 4");
-               this.mvc.perform(mockRequest)
+        this.mvc.perform(mockRequest)
                 .andExpect(checkStatus)
                 .andExpect(checkBody);
     }
 
     @Test
     void testRemoveID404() throws Exception {
-        RequestBuilder mockRequest = MockMvcRequestBuilders.delete("/remove/4");
-               ResultMatcher checkStatus = MockMvcResultMatchers.status().isNotFound();
-           ResultMatcher checkBody = MockMvcResultMatchers.content().string("No person found with id 4");
+        RequestBuilder mockRequest = MockMvcRequestBuilders.delete("/person/remove/4");
+        ResultMatcher checkStatus = MockMvcResultMatchers.status().isNotFound();
+        ResultMatcher checkBody = MockMvcResultMatchers.content().string("No person found with id 4");
 
         this.mvc.perform(mockRequest)
                 .andExpect(checkStatus)
@@ -160,7 +154,7 @@ public class PersonControllerMvcTest {
 
     @Test
     void testUpdateID404() throws Exception {
-        RequestBuilder mockRequest = MockMvcRequestBuilders.patch("/update/4");
+        RequestBuilder mockRequest = MockMvcRequestBuilders.patch("/person/update/4");
         ResultMatcher checkStatus = MockMvcResultMatchers.status().isNotFound();
         ResultMatcher checkBody = MockMvcResultMatchers.content().string("No person found with id 4");
 
